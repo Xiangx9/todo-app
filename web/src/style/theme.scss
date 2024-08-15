@@ -1,0 +1,14 @@
+:root[theme-mode='light'] {
+  --bg-color:  #fff;
+  --text-color: #000
+}
+
+:root[theme-mode='dark'] {
+  --bg-color: #2c2c2c;
+  --text-color: #fff
+}
+
+:root[theme-mode='red'] {
+  --bg-color: rgb(0, 128, 255);
+  --text-color: red;
+}

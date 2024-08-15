@@ -1,0 +1,33 @@
+{
+  "compilerOptions": {
+    "composite": true, // 对于引用项目必须设置该属性
+    "target":  "ESNext", // 将代码编译为最新版本的 JS
+    "lib": ["ES2023"], // 引入 ES 最新特性和 DOM 接口的类型定义
+    "module": "ESNext", // 使用 ES Module 格式打包编译后的文件
+    "skipLibCheck": true, // 跳过对 .d.ts 文件的类型检查
+
+    /* Bundler mode */
+    "moduleResolution": "bundler", // 使用 Node 的模块解析策略
+    "allowImportingTsExtensions": true,// 允许导入 .ts 文件
+    "resolveJsonModule": true, // 允许导入 .json 文件
+    "esModuleInterop": true, // 允许从 CommonJS 模块中导入
+    "allowSyntheticDefaultImports": true, // 允许从没有默认导出的模块中默认导入
+
+    /* Module */
+    "allowJs": true, // 允许编译 JavaScript 文件
+    "isolatedModules": true,// 该属性要求所有文件都是 ES Module 模块。
+    "moduleDetection": "force", // 强制使用 ES Module 模块解析
+
+    /* Emit */
+    "declaration": true, // 生成 .d.ts 类型声明文件
+    "noEmit": true, // 不生成编译后的文件
+
+
+    /* Linting */
+    "strict": true, // 开启所有严格类型检查选项
+    "noUnusedLocals": true, // 检查未使用的局部变量
+    "noUnusedParameters": true, // 检查未使用的函数参数
+    "noFallthroughCasesInSwitch": true // 检查 switch 语句中的 fallthrough 代码
+  },
+  "include": ["vite.config.ts"]
+}
