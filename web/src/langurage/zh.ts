@@ -5,5 +5,11 @@ export default {
     TailwindCSS: '去TailwindCSS',
     HelloWorld: '你好'
   },
+  btn:{
+    login:'登录',
+  },
+  goHome:{
+    subTitle: '去首页'
+  }
 }
 

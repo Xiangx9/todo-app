@@ -18,7 +18,7 @@
             <div class="central-body">
                 <img class="image-404" src="http://salehriaz.com/404Page/img/404.svg" width="300px">
             </div>
-            <div class="btn-go-home">{{ $t('No.subTitle') }}</div>
+            <div class="btn-go-home" @click="$router.push('/')">{{ $t('No.goHome') }}</div>
             <div class="objects">
                 <img class="object_rocket" src="http://salehriaz.com/404Page/img/rocket.svg" width="40px">
                 <div class="earth-moon">

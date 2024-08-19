@@ -1,2 +1,27 @@
 @import "./theme.scss";
-@import "./global.scss"
+@import "./global.scss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+:root {
+  color: var(--text-color);
+  background-color: var(--bg-color);
+}
+
+/* 清除預設的margin和padding */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+a {
+  text-decoration: none;
+  color: inherit;
+}
+ul li {
+  list-style: none;
+}
+
+

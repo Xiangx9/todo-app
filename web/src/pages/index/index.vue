@@ -4,8 +4,9 @@
     <div class="text">
     </div>
     <br>---------------------------------------------------<br>
-    <el-button type="primary" @click="goParent()">{{ $t(`table.Parent`) }}</el-button>
-    <el-button type="success" @click="goTailwindCSS()">{{ $t(`table.TailwindCSS`) }}</el-button>
+
+    <a-button type="primary" @click="goParent()">{{ $t(`table.Parent`) }}</a-button>
+    <a-button type="primary" @click="goTailwindCSS()">{{ $t(`table.TailwindCSS`) }}</a-button>
 
   </div>
 </template>
@@ -28,7 +29,7 @@ const goParent = () => {
 
 const goTailwindCSS = () => {
   router.push({
-    name: '/TailwindCSS/',
+    name: '/login/',
     params: { id: 1 }
   })
 }

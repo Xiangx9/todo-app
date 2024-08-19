@@ -5,7 +5,7 @@ import AutoImport from "unplugin-auto-import/vite";
 import Components from "unplugin-vue-components/vite";
 import vue from "@vitejs/plugin-vue";
 import VueRouter from 'unplugin-vue-router/vite';
-
+import { codeInspectorPlugin } from 'code-inspector-plugin'; //查看源代码位置
 // https://vitejs.dev/config/
 
 export default defineConfig(({ command, mode }) => {
@@ -29,8 +29,8 @@ export default defineConfig(({ command, mode }) => {
         include: [/\.[tj]sx?$/, /\.vue$/, /\.vue\?vue/, /\.md$/],
         dts: "src/auto-imports.d.ts",
       }),
-      Components({
-
+      codeInspectorPlugin({
+        bundler: 'vite',
       }),
     ],
     resolve: {

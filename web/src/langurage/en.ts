@@ -5,5 +5,11 @@ export default {
     TailwindCSS: 'Go TailwindCSS',
     HelloWorld: 'HelloWorld'
   },
+  btn:{
+    login:'log in',
+  },
+  goHome:{
+    subTitle: 'Go Home',
+  }
 }
 
