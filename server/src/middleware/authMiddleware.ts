@@ -1,11 +1,12 @@
 import jwt from 'jsonwebtoken';
 import { Context, Next } from 'koa';
 
+// 验证token中间件
 export const authMiddleware = async (ctx: Context, next: Next) => {
   const token = ctx.headers.authorization?.split(' ')[1];
   if (!token) {
     ctx.status = 401;
-    ctx.body = { error: 'Authentication required' };
+    ctx.body = { error: '请登录' };
     return;
   }
 
@@ -15,6 +16,6 @@ export const authMiddleware = async (ctx: Context, next: Next) => {
     await next();
   } catch (error) {
     ctx.status = 401;
-    ctx.body = { error: 'Invalid token' };
+    ctx.body = { error: 'token过期' };
   }
 };

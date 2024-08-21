@@ -56,8 +56,8 @@ const handleFinishFailed: FormProps['onFinishFailed'] = errors => {
 
 // 注册 
 const Register = async (from: any) => {
-  const { data: registerRes } = await register(from)
-  Login(from)
+  await register(from)
+  await Login(from)
 }
 // 登录
 const Login = async (from: any) => {

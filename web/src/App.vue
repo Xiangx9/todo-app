@@ -2,12 +2,18 @@
 import { ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 
+import zhCN from 'ant-design-vue/es/locale/zh_CN';
+import dayjs from 'dayjs';
+import 'dayjs/locale/zh-cn';
+dayjs.locale('zh-cn');
 //i18n
 const I18n = useI18n()
 const { locale } = useI18n()
+let antlocale: any = ref(locale.value == 'zh-cn' ? zhCN : null)
 // 切换语言更改locale.value的值即可但要跟你index.js中message设置的值一致！
 const translate = (lang: string) => {
   locale.value = lang
+  antlocale.value = lang == 'zh-cn' ? zhCN : null
   localStorage.setItem('lang', lang)
 }
 
@@ -40,12 +46,15 @@ onMounted(() => {
       </a-select>
     </div>
   </div>
+
   <keep-alive>
-    <router-view v-slot="{ Component, route }">
-      <!-- <transition :name="route.meta.transition"> -->
-      <component :is="Component" />
-      <!-- </transition> -->
-    </router-view>
+    <a-config-provider :locale="antlocale">
+      <router-view v-slot="{ Component, route }">
+        <!-- <transition :name="route.meta.transition"> -->
+        <component :is="Component" />
+        <!-- </transition> -->
+      </router-view>
+    </a-config-provider>
   </keep-alive>
 </template>
 

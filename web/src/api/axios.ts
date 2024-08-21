@@ -1,8 +1,13 @@
 import axios from 'axios';
 import { showMessage } from "./status"; // 引入状态码文件
-
-let token = ''
-let refreshTokens = ''
+import { userState } from "@/store/user"; // 引入用户信息
+interface UserValue {
+  token: string;
+  refreshToken?: string;
+}
+let { user } = userState();
+let token = (user.value as UserValue).token || '';
+let refreshTokens = (user.value as UserValue).refreshToken || '';
 
 axios.defaults.baseURL = ""; // 设置默认接口地址
 
@@ -36,7 +41,7 @@ let isRefreshing = false
 //重试队列
 let requests: any[] = []
 function refreshToken(params: any) {
-  return axios.post("/api/auth/refresh-token", params).then((res) => res.data);
+  return axios.post("/api/user/refresh-token", params).then((res) => res.data);
 }
 
 //http response 拦截器
@@ -61,10 +66,10 @@ axios.interceptors.response.use(
           return refreshToken(params).then((res) => {
             // console.log("res", res);
             // 储存token
-            let token = res.token
-            let refreshToken = res.refreshToken
-            const newToken = res.token; // 将新的token保存到本地
+            (user.value as UserValue).token = res.token;
+            (user.value as UserValue).refreshToken = res.refreshToken;
 
+            const newToken = res.token;
             originalRequest.headers.Authorization = `Bearer ${newToken}`; // 将新的token设置到请求头中
             // token 刷新后将数组的方法重新执行
             requests.forEach((cb) => {
