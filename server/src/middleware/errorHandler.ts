@@ -5,9 +5,9 @@ export const errorHandler = async (ctx: Context, next: Next) => {
     await next();
   } catch (err) {
     console.error('Error:', err);
-    ctx.status = err.status || 500;
+    ctx.status = ctx.status || 500;
     ctx.body = {
-      message: err.message || 'Internal Server Error',
+      message: ctx.message || '内部服务器错误',
     };
   }
 };

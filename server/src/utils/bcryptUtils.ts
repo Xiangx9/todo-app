@@ -1,3 +1,4 @@
+// 密码加密
 import bcrypt from 'bcryptjs';
 
 export const hashPassword = async (password: string) => {
