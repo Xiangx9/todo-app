@@ -10,6 +10,13 @@ export default {
   },
   goHome:{
     subTitle: 'Go Home',
+  },
+  index:{
+    Projects: 'Projects',
+    low:'low',
+    medium: 'medium',
+    high: 'high',
+    all: 'all',
   }
 }
 

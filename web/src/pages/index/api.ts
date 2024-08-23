@@ -24,3 +24,21 @@ export const putTasks = ( params:any) => {
 export const completedTasks = (id:string) => {
   return request(`/api/tasks/completed/${id}`, {},'put')
 }
+
+//获取项目
+export const getProjects=()=>{
+  return request('/api/projects/', {}, 'get')
+}
+
+//添加项目
+export const postProjects=(params:any)=>{
+  return request('/api/projects/', params, 'post')
+}
+//删除项目
+export const deleteProjects=(id:string)=>{
+  return request(`/api/projects/${id}`, {}, 'delete')
+}
+//更新项目
+export const putProjects=(params:any)=>{
+  return request(`/api/projects/${params.id}`, params, 'put')
+}

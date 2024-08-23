@@ -16,6 +16,6 @@ export const authMiddleware = async (ctx: Context, next: Next) => {
     await next();
   } catch (error) {
     ctx.status = 401;
-    ctx.body = { error: 'token过期' };
+    ctx.body = { error,msg: 'token无效' };
   }
 };

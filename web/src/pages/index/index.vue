@@ -4,16 +4,17 @@
     <a-date-picker v-model:value="filter.dueDate" picker="month" @change="getTaskList" valueFormat="YYYY-MM" />
     <div style="margin:10px;">
       <a-radio-group v-model:value="filter.priority" name="radioGroup" @change="getTaskList">
-        <a-radio value="low">低</a-radio>
-        <a-radio value="medium">中</a-radio>
-        <a-radio value="high">高</a-radio>
-        <a-radio value="1">全部</a-radio>
+        <a-radio value="low">{{ $t('index.low') }}</a-radio>
+        <a-radio value="medium">{{ $t('index.medium') }}</a-radio>
+        <a-radio value="high">{{ $t('index.high') }}</a-radio>
+        <a-radio value="1">{{ $t('index.all') }}</a-radio>
       </a-radio-group>
       <br>
     </div>
-    <a-card style="width: 80%;height: 400px;overflow:auto;box-shadow: 0 0 10px 5px rgba(0,0,0,0.1);" ref="containerRef"
+    <a-card style="width: 80%;height: 500px;overflow:auto;box-shadow: 0 0 10px 5px rgba(0,0,0,0.1);" ref="containerRef"
       @scroll="handleScroll">
       <a-space direction="vertical" style="width: 100%">
+        <a-button type="primary" ghost @click="router.push('/Projects/')">{{ $t('index.Projects') }}</a-button>
         <a-alert v-for="item in taskList" :message="`优先级：${item.priority} ${item.dueDate}`" :description="item.title"
           :type="item.completed ? 'success' : 'error'" show-icon closable @close="close(item)">
           <template #icon><smile-outlined /></template>
@@ -32,13 +33,37 @@
       </a-space>
     </a-card>
 
+
+    <div v-if="border" style="width: 100vw;height: 100vh;position: absolute;" @click="border = false"></div>
+
     <!-- 添加 -->
     <div>
-      <a-button size="large" shape="circle" @click="open = true;" class="flexBtn">
-        <PlusOutlined />
-      </a-button>
+      <div class="AddBox">
+        <div class="border" v-if="border">
+          <a-button size="large" shape="circle" @click="ProjectOpen = true;">
+            <MedicineBoxTwoTone />
+          </a-button>
+          <a-button size="large" shape="circle" @click="open = true;">
+            <PlusCircleTwoTone />
+          </a-button>
+        </div>
+        <a-button v-else size="large" shape="circle" @click="border = true;" class="flexBtn">
+          <PlusOutlined />
+        </a-button>
+      </div>
+      <!-- 添加项目 -->
+      <a-modal v-model:open="ProjectOpen" title="" @ok="AddProject">
+        <a-space direction="vertical" :size="18" style="width: 90%">
+          <a-input v-model:value="Addfrom.name" placeholder="请添加项目" />
+        </a-space>
+      </a-modal>
+      <!-- 添加任务 -->
       <a-modal v-model:open="open" title="" @ok="Add">
         <a-space direction="vertical" :size="18" style="width: 90%">
+          选择项目： <a-select ref="select" v-model:value="Addfrom.projectId" style="width: 120px" placeholder="请选择项目"
+            @change="handleChange">
+            <a-select-option v-for="item in projectList" :value="item._id">{{ item.name }}</a-select-option>
+          </a-select>
           <a-textarea v-model:value="Addfrom.title" placeholder="请编写任务" :rows="4" />
           优先级： <a-radio-group v-model:value="Addfrom.priority" :options="plainOptions" />
           截止日期：<a-date-picker v-model:value="Addfrom.dueDate" />
@@ -64,9 +89,9 @@ import './index.scss'
 import { message } from 'ant-design-vue';
 const [messageApi, contextHolder] = message.useMessage()
 import dayjs, { Dayjs } from 'dayjs';
-import { SmileOutlined, CheckCircleOutlined, FormOutlined, PlusOutlined } from '@ant-design/icons-vue';
+import { SmileOutlined, CheckCircleOutlined, FormOutlined, PlusOutlined, MedicineBoxTwoTone, PlusCircleTwoTone } from '@ant-design/icons-vue';
 import { ref, reactive, onMounted, computed, watch, } from "vue";
-import { getTasks, postTasks, putTasks, deleteTasks, completedTasks } from "./api";
+import { getTasks, postTasks, putTasks, deleteTasks, completedTasks, getProjects, postProjects, putProjects, deleteProjects } from "./api";
 import { useRouter, useRoute } from 'vue-router'
 const router = useRouter()
 const route = useRoute()
@@ -75,6 +100,14 @@ const route = useRoute()
 const filter = ref<any>({
   priority: '1'
 })
+// 获取项目
+const projectList = ref<any>([])
+const getProjectList = async () => {
+  let res: any = await getProjects()
+  projectList.value = res.data
+}
+
+
 //获取任务
 const taskList = ref<any>([])
 const pageNumber = ref<number>(1)
@@ -102,6 +135,7 @@ const getTaskList = async () => {
   console.log(taskList.value);
 }
 onMounted(() => {
+  getProjectList()
   getTaskList()
 })
 
@@ -113,19 +147,24 @@ const End = async (item: any) => {
 }
 
 //添加
+const border = ref<boolean>(false)
 const open = ref<boolean>(false);
-const Addfrom = ref<any>({});
+const ProjectOpen = ref<boolean>(false)
+const Addfrom = ref<any>({
+  projectId: '',
+  priority: 'medium'
+});
 const plainOptions = ['low', 'medium', 'high'];
 const Add = async (e: MouseEvent) => {
   try {
-    if (!Addfrom.value.title) {
-      messageApi.info('请填写任务');
+    if (!Addfrom.value.projectId || !Addfrom.value.title) {
+      messageApi.info('请选择项目');
       return
     }
     let pram = {
       title: Addfrom.value.title,
-      priority: Addfrom.value.priority,
       dueDate: Addfrom.value.dueDate,
+      ...Addfrom.value
     }
     let res = await postTasks(pram)
     msg(res.data.message)
@@ -138,6 +177,21 @@ const Add = async (e: MouseEvent) => {
 
   }
 };
+
+const AddProject = async () => {
+  try {
+    let pram = {
+      name: Addfrom.value.name
+    }
+    let res = await postProjects(pram)
+    msg(res.data.message)
+    await getTaskList()
+    ProjectOpen.value = false
+  } catch (error) {
+    console.log("添加项目", error);
+
+  }
+}
 
 //编辑
 const EditOpen = ref<boolean>(false);

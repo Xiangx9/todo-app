@@ -10,6 +10,13 @@ export default {
   },
   goHome:{
     subTitle: '去首页'
+  },
+  index:{
+    Projects: '项目',
+    low:'低',
+    medium: '中',
+    high: '高',
+    all: '全部',
   }
 }
 

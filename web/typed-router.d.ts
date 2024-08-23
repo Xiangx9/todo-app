@@ -22,7 +22,7 @@ declare module 'vue-router/auto-routes' {
     '/[...404]': RouteRecordInfo<'/[...404]', '/:404(.*)', { 404: ParamValue<true> }, { 404: ParamValue<false> }>,
     '/Child/': RouteRecordInfo<'/Child/', '/Child', Record<never, never>, Record<never, never>>,
     '/login/': RouteRecordInfo<'/login/', '/login', Record<never, never>, Record<never, never>>,
-    '/Parent/': RouteRecordInfo<'/Parent/', '/Parent', Record<never, never>, Record<never, never>>,
+    '/Projects/': RouteRecordInfo<'/Projects/', '/Projects', Record<never, never>, Record<never, never>>,
     '/TailwindCSS/': RouteRecordInfo<'/TailwindCSS/', '/TailwindCSS', Record<never, never>, Record<never, never>>,
   }
 }

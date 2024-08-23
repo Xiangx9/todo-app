@@ -6,7 +6,7 @@
 - **前端**: 使用HTML, CSS, JavaScript, Vue/React.js
 - **后端**: 使用Node.js和Koa2 + ts
 - **数据库**: MongoDB
-
+![alt text](image.png)
 
 # 项目构建
 ## 前端：vue3 + vite + ts

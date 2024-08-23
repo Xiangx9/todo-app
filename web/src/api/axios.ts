@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { message } from 'ant-design-vue';
 import { showMessage } from "./status"; // 引入状态码文件
 import { userState } from "@/store/user"; // 引入用户信息
 interface UserValue {
@@ -48,7 +49,6 @@ function refreshToken(params: any) {
 axios.interceptors.response.use(
   (response) => {
     // 对响应数据做一些处理
-    // ElMessage.success(response.data.message);
     return response;
   },
   async (error) => {
@@ -64,7 +64,7 @@ axios.interceptors.response.use(
           }
 
           return refreshToken(params).then((res) => {
-            // console.log("res", res);
+            console.log("res", res.token);
             // 储存token
             (user.value as UserValue).token = res.token;
             (user.value as UserValue).refreshToken = res.refreshToken;
@@ -93,10 +93,9 @@ axios.interceptors.response.use(
         }
       }
       showMessage(response.status); // 传入响应码，匹配响应码对应信息
-      // ElMessage.warning(response.data.message);
       return Promise.reject(response.data);
     } else {
-      // ElMessage.warning("网络连接异常,请稍后再试!");
+      return Promise.reject(error);
     }
   }
 );
@@ -104,8 +103,8 @@ axios.interceptors.response.use(
 // 封装 GET POST 请求并导出
 export function request(url = "", params = {}, type = "POST") {
   //设置 url params type 的默认值
-  let promise: Promise<any>; // 定义一个promise对象
   return new Promise((resolve, reject) => {
+    let promise: Promise<any>; // 定义一个promise对象
     if (type.toUpperCase() === "GET") {
       promise = axios({
         url,
@@ -136,8 +135,9 @@ export function request(url = "", params = {}, type = "POST") {
       console.log("处理返回res", res);
     })
       .catch((err) => {
-        console.log("处理返回err", err);
         reject(err);
+        message.error(err.message);
+        console.log("处理返回err", err);
       });
   });
 }

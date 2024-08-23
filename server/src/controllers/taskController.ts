@@ -2,7 +2,20 @@ import { Context } from 'koa';
 import Task from '../models/Task';
 var dayjs = require('dayjs')
 
-// 获取任务列表
+// 获取全部任务列表
+export const getAllTasks = async (ctx: Context) => {
+  const userId = ctx.state.user.id;
+  let { projectId } = ctx.query
+  let filter: any = {
+    userId
+  }
+  projectId ? filter.projectId = projectId : ''
+  const tasks = await Task.find(filter).sort({ 'createdAt': -1 }).populate('projectId').exec();
+  ctx.body = { tasks, message: '获取成功'
+  }
+}
+
+// 获取任务列表 分页处理
 export const getTasks = async (ctx: Context) => {
   const userId = ctx.state.user.id;
   let { priority,dueDate } = ctx.query
@@ -30,8 +43,8 @@ export const getTasks = async (ctx: Context) => {
 // 创建任务
 export const createTask = async (ctx: Context) => {
   const userId = ctx.state.user.id;
-  const { title, description, priority, dueDate } = ctx.request.body;
-  const task = new Task({ title, description, priority, dueDate, userId });
+  const { title, description, priority, dueDate ,projectId} = ctx.request.body;
+  const task = new Task({ title, description, priority, dueDate, userId , projectId });
   await task.save();
   ctx.body = { task, message: '创建成功' };
 };
